@@ -12,7 +12,7 @@ export class Client {
     cookieJar: CookieJar;
     defaultHeaders: Object;
 
-    constructor(options: { cookieJar: CookieJar, defaultHeaders: Object }) {
+    constructor(options: { cookieJar?: CookieJar, defaultHeaders?: Object } = {}) {
         this.cookieJar = options.cookieJar || new CookieJar();
         this.defaultHeaders = options.defaultHeaders || {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
@@ -29,6 +29,11 @@ export class Client {
      */
     async get(url: string, options?: requestOptions = {}) {
         options = this.cookieJar.fill(url, options || {});
+
+        options.headers = {
+            ...options.headers,
+            ...this.defaultHeaders
+        };
 
         const response: Response = await got(url, options);
 
