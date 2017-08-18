@@ -16,9 +16,9 @@ export class Client {
     constructor(options: { cookieJar?: CookieJar, defaultHeaders?: Object } = {}) {
         this.cookieJar = options.cookieJar || new CookieJar();
         this.defaultHeaders = options.defaultHeaders || {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Cache-Control": "max-age=0"
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
+            "accept-language": "en-US,en;q=0.5",
+            "cache-control": "max-age=0"
         };
     }
 
