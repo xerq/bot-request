@@ -5,7 +5,8 @@ import CookieJar from "./CookieJar";
 
 export type requestOptions = {
     url?: string,
-    headers?: Object
+    headers?: Object,
+    method?: string
 };
 
 export class Client {
@@ -22,41 +23,48 @@ export class Client {
     }
 
     /**
+     * Send a request
+     * @returns Promise<$Response>
+     * @param {string} url - URL where the request should be sent
+     * @param {requestOptions} options
+     */
+    async request(url: string, options?: requestOptions = {}) {
+        options = this.cookieJar.fill(url, options || {});
+
+        options.headers = {
+            ...options.headers,
+            ...this.defaultHeaders
+        };
+
+        options.followRedirect = false;
+
+        const response: Response = await got(url, options);
+
+        this.cookieJar.handler(response);
+
+        if ((response.headers: Object)["location"]) {
+            return await this.get((response.headers: Object)["location"]);
+        }
+
+        return response;
+    }
+
+    /**
      * Sends a get request
      * @returns Promise<$Response>
      * @param {string} url - URL where the request should be sent
      * @param {requestOptions} options
      */
     async get(url: string, options?: requestOptions = {}) {
-        options = this.cookieJar.fill(url, options || {});
-
-        options.headers = {
-            ...options.headers,
-            ...this.defaultHeaders
-        };
-
-        const response: Response = await got(url, options);
-
-        this.cookieJar.handler(response);
-
-        return response;
+        options.method = "GET";
+        
+        return await this.request(url, options);
     }
 
     async post(url: string, options?: requestOptions = {}) {
-        options = this.cookieJar.fill(url, options || {});
-
         options.method = "POST";
 
-        options.headers = {
-            ...options.headers,
-            ...this.defaultHeaders
-        };
-
-        const response: Response = await got(url, options);
-
-        this.cookieJar.handler(response);
-
-        return response;
+        return await this.request(url, options);
     }
 }
 
