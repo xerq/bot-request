@@ -50,7 +50,7 @@ export class Client {
     }
 
     /**
-     * Sends a get request
+     * Sends a GET request
      * @returns Promise<$Response>
      * @param {string} url - URL where the request should be sent
      * @param {requestOptions} options
@@ -61,6 +61,12 @@ export class Client {
         return await this.request(url, options);
     }
 
+    /**
+     * Sends a POST request
+     * @returns Promise<$Response>
+     * @param {string} url - URL where the request should be sent
+     * @param {requestOptions} options
+     */
     async post(url: string, options?: requestOptions = {}) {
         options.method = "POST";
 
