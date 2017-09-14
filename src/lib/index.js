@@ -49,6 +49,19 @@ export class Client {
         return response;
     }
 
+    stream(url: string, options?: requestOptions = {}) {
+        options = this.cookieJar.fill(url, options || {});
+
+        options.headers = {
+            ...options.headers,
+            ...this.defaultHeaders
+        };
+
+        options.followRedirect = false;
+
+        return got.stream(url, options);
+    }
+
     /**
      * Sends a GET request
      * @returns Promise<$Response>
